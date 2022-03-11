@@ -39,10 +39,10 @@
         <header class="masthead">
             <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
                 <div class="d-flex justify-content-center">
-                    <div class="text-center">
-                        <h1 class="mx-auto my-0 text-uppercase">Grayscale</h1>
-                        <h2 class="text-white-50 mx-auto mt-2 mb-5">A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
-                        <a class="btn btn-primary" href="#alarm">Get Started</a>
+                    <div class="text-center" id="sucmyballs">
+                        <h1 class="mx-auto my-0 text-uppercase" id="time">Grayscale</h1>
+                        <h2 class="text-white-50 mx-auto mt-2 mb-5" >A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
+                        <button class="btn btn-primary" href="#alarm" onclick="knop('test')">data yay</button>
                     </div>
                 </div>
             </div>
@@ -234,5 +234,24 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script>
+
+            function knop(nummer){
+            console.log("jo tits");
+            $( "#sucmyballs" ).load("/ajax", { "getal": nummer });
+            console.log("jo boobies")
+            }
+            window.setInterval(function givemetime()
+            {
+            	$( "#time" ).load("/tijd");
+                
+            },100)
+
+
+
+        </script>
     </body>
 </html>
