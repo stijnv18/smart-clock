@@ -16,5 +16,14 @@ def ajax():
 def tijd():
     tijd=time.strftime('%H:%M:%S',time.localtime())
     return tijd
+
+@app.route('/timer')
+def timer():
+    timertime =time.strftime('%H:%M:%S',request.form["settingup"])
+    with open("timers.txt", "wb") as f:
+        f.write()
+    print(timertime)
+    return timertime
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=5050)

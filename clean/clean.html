@@ -54,6 +54,7 @@
 						<h2 class="text-white mb-4">set alarm here</h2>
 						<p class="text-white-50">
 							<input type="time" name="alarm" id="alarmtime">
+							<input class="btn btn-primary" type="submit" value="submit" onclick="alarmsetup('alarmtime')">
 						</p>
 					</div>
 				</div>
@@ -230,10 +231,17 @@
 	</body>
 </html>
 <script>
+	// function alarmsetup(timesetting) {
+	// 	var txtbox = document.getElementById(timesetting);
+	// 	var timesetting = txtbox.value
+	// 	console.log(timesetting)
+	// 	console.log(typeof(timesetting))
+	// }
 	window.setInterval(function timerefresh()
 	{
 		var today = new Date()
-		
+		// var vandaag = document.getElementById("alarmtime")
+		// console.log(vandaag)
 		if (today.getHours < 10)
 		{
 			var time = "0"+today.getHours()
