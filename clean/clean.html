@@ -42,7 +42,7 @@
 				<div class="d-flex justify-content-center">
 					<div class="text-center">
 						<h1 class="mx-auto my-0 text-uppercase" id="timerefresher"></h1>
-						<h2 class="mx-auto my-0 text-uppercase">bla</h2>
+						<h2 class="mx-auto my-0 text-uppercase" id="checkalarm"></h2>
 					</div>
 				</div>
 			</div>
@@ -57,6 +57,17 @@
 							<input type="time" name="alarm" id="alarmtime">
 							<input class="btn btn-primary" type="submit" value="submit" onclick="alarmsetup('alarmtime')">
 						</p>
+						<h2 class="text-white">Set offset</h2>
+						<h3 class="text-white" id="ifsetoffset"></h3>
+						<p class="text-white-50">
+							<input type="time" name="alarm" id="setoffset" placeholder="00:00">
+							<input class="btn btn-primary" type="submit" value="set offset" onclick="setoffset('setoffset')">
+						</p>
+						<p class="text-white-50">
+							<input class="btn btn-primary" type="submit" value="Lessen rooster" onclick="getles()">
+						</p>
+
+
 					</div>
 				</div>
 			</div>
@@ -241,44 +252,42 @@
 		<footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; Your Website 2021</div></footer>
 		<!-- Bootstrap core JS-->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<!-- Core theme JS-->
 		<script src="js/scripts.js"></script>
+		
 		<!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
+		<p id="return" type="hidden"></p>
 	</body>
+
+
+	<script>
+	function getles() {
+		$( "#return").load("/ajax")
+		}
+	function alarmsetup(timesetting) {
+    	var txtbox = document.getElementById(timesetting);
+   		var timesetting = txtbox.value
+		$( "#return").load("/alarmsetup", { "settingup": timesetting})
+		}
+		
+		function setoffset(timesetting) {
+    	var txtbox = document.getElementById(timesetting);
+   		var offset = txtbox.value
+		console.log(offset);
+		$( "#setoffset").load("/setoffset", { "settingup": offset})
+		}
+
+	window.setInterval(function givemetime()
+    	{
+        $( "#timerefresher" ).load("/tijd");
+                
+    	},500)
+	window.setInterval(function givemetime()
+   		{
+        $( "#checkalarm" ).load("/alarmcheck");
+                
+   		},500)
+	</script>
 </html>
-<script>
-	// function alarmsetup(timesetting) {
-	// 	var txtbox = document.getElementById(timesetting);
-	// 	var timesetting = txtbox.value
-	// 	console.log(timesetting)
-	// 	console.log(typeof(timesetting))
-	// }
-	window.setInterval(function timerefresh()
-	{
-		var today = new Date()
-		// var vandaag = document.getElementById("alarmtime")
-		// console.log(vandaag)
-		if (today.getHours < 10)
-		{
-			var time = "0"+today.getHours()
-		}
-		else{
-			var time = today.getHours()
-		}
-		if (today.getMinutes()<10)
-		{
-			var time = time+":"+today.getMinutes()
-		}
-		else{
-			var time = time+":"+today.getMinutes()
-		}
-		if (today.getSeconds()<10)
-		{
-			var time = time+":0"+today.getSeconds()
-		}
-		else{
-			var time = time+":"+today.getSeconds()
-		}
-		document.getElementById("timerefresher").innerHTML=time
-	},500)
-</script>
+
