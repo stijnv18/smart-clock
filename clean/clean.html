@@ -55,21 +55,13 @@
 						<h2 class="text-white">set alarm here</h2>
 						<p class="text-white-50">
 							<input type="time" name="alarm" id="alarmtime">
-							<label for="maandag">monday:
-							<input type="checkbox" name="days" id="maandag" value="1"/></label>
-							<label for="dinsdag">tuesday:
-							<input type="checkbox" name="days" id="dinsdag" value="2"/></label>
-							<label for="woensdag">wednesday:
-							<input type="checkbox" name="days" id="woensdag" value="3"/></label>
-							<label for="donderdag">thursday:
-							<input type="checkbox" name="days" id="donderdag" value="4"/></label>
-							<label for="vrijdag">friday:
-							<input type="checkbox" name="days" id="vrijdag" value="5"/></label>
-							<label for="zaterdag">saturday:
-							<input type="checkbox" name="days" id="zaterdag" value="6"/></label>
-							<label for="zondag">sunday:
-							<input type="checkbox" name="days" id="zondag" value="7"/></label>
 							<input class="btn btn-primary" type="submit" value="submit" onclick="alarmsetup('alarmtime')">
+						</p>
+						<h2 class="text-white">Set offset</h2>
+						<h3 class="text-white" id="ifsetoffset"></h3>
+						<p class="text-white-50">
+							<input type="time" name="alarm" id="setoffset" placeholder="00:00">
+							<input class="btn btn-primary" type="submit" value="set offset" onclick="setoffset('setoffset')">
 						</p>
 						<p class="text-white-50">
 							<input class="btn btn-primary" type="submit" value="Lessen rooster" onclick="getles()">
@@ -263,6 +255,7 @@
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<!-- Core theme JS-->
 		<script src="js/scripts.js"></script>
+		
 		<!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 		<p id="return" type="hidden"></p>
 	</body>
@@ -276,19 +269,25 @@
     	var txtbox = document.getElementById(timesetting);
    		var timesetting = txtbox.value
 		$( "#return").load("/alarmsetup", { "settingup": timesetting})
-    	console.log(timesetting)
-    	console.log(typeof(timesetting))
 		}
+		
+		function setoffset(timesetting) {
+    	var txtbox = document.getElementById(timesetting);
+   		var offset = txtbox.value
+		console.log(offset);
+		$( "#setoffset").load("/setoffset", { "settingup": offset})
+		}
+
 	window.setInterval(function givemetime()
     	{
         $( "#timerefresher" ).load("/tijd");
                 
-    	},100)
+    	},500)
 	window.setInterval(function givemetime()
    		{
         $( "#checkalarm" ).load("/alarmcheck");
                 
-   		},100)
+   		},500)
 	</script>
 </html>
 
