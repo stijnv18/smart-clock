@@ -1,12 +1,16 @@
 from signal import alarm
 from flask import Flask, render_template,request,url_for
+from numpy import asscalar
 from ApiCanvas import *
 import time
 import datetime
 import os
+from canvasapi import Canvas
 app = Flask(__name__,static_url_path='', static_folder='clean',template_folder='clean')
 
-
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
  
 
 
@@ -16,8 +20,19 @@ def index():
 
 @app.route('/ajax')
 def ajax():
-	roosterlist=roost.dataisvanmij()
-	print(roosterlist)
+	lessen=Api.getcourse()
+	print(lessen[0][0].due_at)
+	current_time=datetime.datetime.now()
+	listassdue=[]
+	for vak in lessen:
+		for ass in vak:
+			try:
+				if current_time < datetime.datetime.strptime(ass.due_at, r'%Y-%m-%dT%H:%M:%SZ'):
+					listassdue.append(ass)
+					print(ass)
+			except:
+				pass
+	print(listassdue[0])
 	return "return"
 
 
@@ -71,14 +86,14 @@ def setoffset():
 def alarmsetup():
 	string = str(request.form["settingup"])
 	currdate= datetime.datetime.now()
-	print(string)
+	#(string)
 	alarmen=[]
 	try:
 		with open("alarm.txt", "r") as f:
 			for line in f:
 				line = line.split("\n")[0]
 				alarmen.append(line)
-				print(alarmen)
+				#print(alarmen)
 	except:
 		alarmen=[]
 	alarmen.append(string+" "+str(currdate.day)+" "+str(currdate.month)+" "+str(currdate.year))
@@ -100,15 +115,15 @@ def alamrchek():
 		return("No alarms set")
 	
 	if os.stat('alarm.txt').st_size != 0:
-		print("file not empty")
+		#print("file not empty")
 		afgaan = datetime.datetime(int(alarmen[0].split(" ")[3]), int(alarmen[0].split(" ")[2]), int(alarmen[0].split(" ")[1]), int(alarmen[0].split(" ")[0].split(":")[0]), int(alarmen[0].split(" ")[0].split(":")[1]))
 	else:
-		print("file empty")
+		#print("file empty")
 		afgaan = datetime.datetime(int(2010), int(1), int(1), int(1), int(1))
 	now = datetime.datetime.now()
 	keep=[]
 
-	print(alarmen)
+	#print(alarmen)
 
 	for a in alarmen:
 		afgaan = datetime.datetime(int(a.split(" ")[3]), int(a.split(" ")[2]), int(a.split(" ")[1]), int(a.split(" ")[0].split(":")[0]), int(a.split(" ")[0].split(":")[1]))
@@ -118,11 +133,12 @@ def alamrchek():
 		elif int((afgaan-now).days)>=0:
 			keep.append(a)
 		else: 
-			print(afgaan)
-			print(a)
-			print(afgaan.day) 
+			pass
+			#print(afgaan)
+			#print(a)
+			#print(afgaan.day) 
 				
-	print(keep)
+	#print(keep)
 	with open("alarm.txt","w") as f:
 		for k in keep:
 			f.write(k+"\n")
