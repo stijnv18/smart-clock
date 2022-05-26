@@ -18,10 +18,13 @@ log.setLevel(logging.ERROR)
 def index():
 	return render_template('clean.html')
 
+
+@app.route('/timer',methods=["POST"])
+def settimer():
+	timer = str(request.form["timer"])
 @app.route('/ajax')
 def ajax():
 	lessen=Api.getcourse()
-	print(lessen[0][0].due_at)
 	current_time=datetime.datetime.now()
 	listassdue=[]
 	for vak in lessen:
@@ -29,11 +32,18 @@ def ajax():
 			try:
 				if current_time < datetime.datetime.strptime(ass.due_at, r'%Y-%m-%dT%H:%M:%SZ'):
 					listassdue.append(ass)
-					print(ass)
+					
 			except:
 				pass
 	print(listassdue[0])
-	return "return"
+
+	ret='<div class="row gx-4 gx-lg-5">'
+	for ass in listassdue:
+		ret+='<div class="col-md-4 mb-3 mb-md-0"><div class="card py-4 h-100"><div class="card-body text-center"><br><h4 class="text-uppercase m-0">'+str(ass)+str(datetime.datetime.strptime(ass.due_at, r'%Y-%m-%dT%H:%M:%SZ'))+'</h4><hr class="my-4 mx-auto" /></div></div></div>'
+	ret +='</div>'
+
+
+	return ret
 
 
 @app.route('/setoffset',methods=["POST"])
@@ -86,14 +96,12 @@ def setoffset():
 def alarmsetup():
 	string = str(request.form["settingup"])
 	currdate= datetime.datetime.now()
-	#(string)
 	alarmen=[]
 	try:
 		with open("alarm.txt", "r") as f:
 			for line in f:
 				line = line.split("\n")[0]
 				alarmen.append(line)
-				#print(alarmen)
 	except:
 		alarmen=[]
 	alarmen.append(string+" "+str(currdate.day)+" "+str(currdate.month)+" "+str(currdate.year))
