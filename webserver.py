@@ -1,17 +1,28 @@
-from signal import alarm
+import pygame
+import threading
 from flask import Flask, render_template,request,url_for
 from numpy import asscalar
 from ApiCanvas import *
 import time
 import datetime
 import os
+import time
+
 from canvasapi import Canvas
 app = Flask(__name__,static_url_path='', static_folder='clean',template_folder='clean')
 
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
- 
+pygame.init()
+pygame.mixer.init()
+ring = pygame.mixer.Sound("test.wav")
+
+
+def playadio():
+	global pygame
+	ring.play()
+	time.sleep(5)
 
 
 @app.route('/')
@@ -22,6 +33,23 @@ def index():
 @app.route('/timer',methods=["POST"])
 def settimer():
 	timer = str(request.form["timer"])
+
+	currdate= datetime.datetime.now()
+	alarmen=[]
+	try:
+		with open("alarm.txt", "r") as f:
+			for line in f:
+				line = line.split("\n")[0]
+				alarmen.append(line)
+	except:
+		alarmen=[]
+	alarmen.append(timer+" "+str(currdate.day)+" "+str(currdate.month)+" "+str(currdate.year))
+	with open("alarm.txt","w") as f:
+		for alarm in alarmen:
+			f.write(alarm+"\n")
+
+	return "return"
+
 @app.route('/ajax')
 def ajax():
 	lessen=Api.getcourse()
@@ -113,6 +141,7 @@ def alarmsetup():
 
 @app.route('/alarmcheck')
 def alamrchek():
+
 	alarmen=[]
 	try:
 		with open("alarm.txt", "r") as f:
@@ -137,6 +166,9 @@ def alamrchek():
 		afgaan = datetime.datetime(int(a.split(" ")[3]), int(a.split(" ")[2]), int(a.split(" ")[1]), int(a.split(" ")[0].split(":")[0]), int(a.split(" ")[0].split(":")[1]))
 		
 		if afgaan.day == now.day and afgaan.hour==now.hour and afgaan.year == now.year and afgaan.second== now.second:
+			print("playing file")
+			audio = threading.Thread(target=playadio)
+			audio.start()
 			return "Wekker werkt"
 		elif int((afgaan-now).days)>=0:
 			keep.append(a)
