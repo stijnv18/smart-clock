@@ -1,27 +1,40 @@
-from signal import alarm
+import pygame
+import threading
 from flask import Flask, render_template,request,url_for
 from numpy import asscalar
 from ApiCanvas import *
 import time
 import datetime
 import os
+import time
+
 from canvasapi import Canvas
 app = Flask(__name__,static_url_path='', static_folder='clean',template_folder='clean')
 
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
- 
+pygame.init()
+pygame.mixer.init()
+ring = pygame.mixer.Sound("test.wav")
+
+def playadio():
+	global pygame
+	ring.play()
+	time.sleep(5)
 
 
 @app.route('/')
 def index():
 	return render_template('clean.html')
 
+
+@app.route('/timer',methods=["POST"])
+def settimer():
+	timer = str(request.form["timer"])
 @app.route('/ajax')
 def ajax():
 	lessen=Api.getcourse()
-	print(lessen[0][0].due_at)
 	current_time=datetime.datetime.now()
 	listassdue=[]
 	for vak in lessen:
@@ -29,11 +42,18 @@ def ajax():
 			try:
 				if current_time < datetime.datetime.strptime(ass.due_at, r'%Y-%m-%dT%H:%M:%SZ'):
 					listassdue.append(ass)
-					print(ass)
+					
 			except:
 				pass
 	print(listassdue[0])
-	return "return"
+
+	ret='<div class="row gx-4 gx-lg-5">'
+	for ass in listassdue:
+		ret+='<div class="col-md-4 mb-3 mb-md-0"><div class="card py-4 h-100"><div class="card-body text-center"><br><h4 class="text-uppercase m-0">'+str(ass)+str(datetime.datetime.strptime(ass.due_at, r'%Y-%m-%dT%H:%M:%SZ'))+'</h4><hr class="my-4 mx-auto" /></div></div></div>'
+	ret +='</div>'
+
+
+	return ret
 
 
 @app.route('/setoffset',methods=["POST"])
@@ -86,14 +106,12 @@ def setoffset():
 def alarmsetup():
 	string = str(request.form["settingup"])
 	currdate= datetime.datetime.now()
-	#(string)
 	alarmen=[]
 	try:
 		with open("alarm.txt", "r") as f:
 			for line in f:
 				line = line.split("\n")[0]
 				alarmen.append(line)
-				#print(alarmen)
 	except:
 		alarmen=[]
 	alarmen.append(string+" "+str(currdate.day)+" "+str(currdate.month)+" "+str(currdate.year))
@@ -105,6 +123,7 @@ def alarmsetup():
 
 @app.route('/alarmcheck')
 def alamrchek():
+
 	alarmen=[]
 	try:
 		with open("alarm.txt", "r") as f:
@@ -129,6 +148,9 @@ def alamrchek():
 		afgaan = datetime.datetime(int(a.split(" ")[3]), int(a.split(" ")[2]), int(a.split(" ")[1]), int(a.split(" ")[0].split(":")[0]), int(a.split(" ")[0].split(":")[1]))
 		
 		if afgaan.day == now.day and afgaan.hour==now.hour and afgaan.year == now.year and afgaan.second== now.second:
+			print("playing file")
+			audio = threading.Thread(target=playadio)
+			audio.start()
 			return "Wekker werkt"
 		elif int((afgaan-now).days)>=0:
 			keep.append(a)
