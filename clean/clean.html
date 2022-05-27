@@ -93,7 +93,7 @@
 		<p class="text-white-50 text-center">
 			<input class="btn btn-primary" type="submit" value="Lessen rooster" onclick="getles()">
 		</p>
-		<div class="container px-4 px-lg-5">
+		<div class="container px-4 px-lg-5" id="taakret">
 			<div class="row gx-4 gx-lg-5">
 				<div class="col-md-4 mb-3 mb-md-0">
 					<div class="card py-4 h-100">
@@ -143,12 +143,17 @@
 
 <script>
 	function getles() {
-		$("#return").load("/ajax")
+		$("#taakret").load("/ajax")
 	}
 	function alarmsetup(timesetting) {
 		var txtbox = document.getElementById(timesetting);
 		var timesetting = txtbox.value
 		$("#return").load("/alarmsetup", { "settingup": timesetting })
+	}
+	function starttimer(smesetting) {
+		var txtbox = document.getElementById(timesetting);
+		var timesetting = txtbox.value
+		$("#return").load("/timer", { "timer": timesetting })
 	}
 
 	function setoffset(timesetting) {
