@@ -141,7 +141,7 @@ def alarmsetup():
 
 @app.route('/alarmcheck')
 def alamrchek():
-	isleeg=True
+
 	alarmen=[]
 	try:
 		with open("alarm.txt", "r") as f:
@@ -152,11 +152,9 @@ def alamrchek():
 		return("No alarms set")
 	
 	if os.stat('alarm.txt').st_size != 0:
-		isleeg=False
 		#print("file not empty")
 		afgaan = datetime.datetime(int(alarmen[0].split(" ")[3]), int(alarmen[0].split(" ")[2]), int(alarmen[0].split(" ")[1]), int(alarmen[0].split(" ")[0].split(":")[0]), int(alarmen[0].split(" ")[0].split(":")[1]))
 	else:
-		Isleeg=True
 		#print("file empty")
 		afgaan = datetime.datetime(int(2010), int(1), int(1), int(1), int(1))
 	now = datetime.datetime.now()
@@ -184,15 +182,7 @@ def alamrchek():
 	with open("alarm.txt","w") as f:
 		for k in keep:
 			f.write(k+"\n")
-	if isleeg==True:
-		return "geen alarm"
-	elif isleeg==False:
-		returnstring="---Lijst alarmen---\n"
-		for a in keep:
-			returnstring+=a
-			returnstring+="\n"
-		return returnstring
-
+	return "geen alarm"
 @app.route('/tijd')
 def tijd():
 	tijd=time.strftime('%H:%M:%S',time.localtime())
