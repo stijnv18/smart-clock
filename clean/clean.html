@@ -49,9 +49,8 @@
 				<div class="text-center">
 					<h1 class="mx-auto my-0 text-uppercase" id="timerefresher"></h1>
 					<h2 class="mx-auto my-0 text-uppercase" id="checkalarm"></h2>
-					<button class="btn btn-primary" id="button1">stop it</button><button class="btn btn-primary"
-						style="margin-left: 20px">clear
-						alarm</button>
+					<button class="btn btn-primary" id="button1" onclick="stopalarm()">stop it</button>
+					<button class="btn btn-primary"style="margin-left: 20px" onclick="clearalarm()">clear alarm</button>
 				</div>
 			</div>
 		</div>
@@ -145,6 +144,12 @@
 
 
 <script>
+	function stopalarm() {
+		$("#return").load("/stopalarm")
+	}
+	function clearalarm() {
+		$("#return").load("/clearalarm")
+	}
 	function getles() {
 		$("#taakret").load("/ajax")
 	}

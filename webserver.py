@@ -29,6 +29,17 @@ def playadio():
 def index():
 	return render_template('clean.html')
 
+@app.route('/clearalarm')
+def clearalarm():
+	with open("alarm.txt","w") as f:
+		f.write("")
+	return "return"
+
+@app.route('/stopalarm')
+def stopalarm():
+	global pygame
+	ring.stop()
+	return "return"
 
 @app.route('/timer',methods=["POST"])
 def settimer():
