@@ -145,41 +145,48 @@
 
 
 <script>
-	function stopalarm() {
-		$("#return").load("/stopalarm")
+	var plat = navigator.platform
+	if (plat == 'Mac68K' || plat == 'MaxPPC' || plat == 'MacIntel' || plat == 'iPhone' || plat == 'iPad' || plat == 'iPod') {
+		$("body").empty()
+		$("body").append("<h1>You dirty MAC user get a real pc<h1>")
 	}
-	function clearalarm() {
-		$("#return").load("/clearalarm")
-	}
-	function getles() {
-		$("#taakret").load("/ajax")
-	}
-	function alarmsetup(timesetting) {
-		var txtbox = document.getElementById(timesetting);
-		var timesetting = txtbox.value
-		$("#return").load("/alarmsetup", { "settingup": timesetting })
-	}
-	function starttimer(smesetting) {
-		var txtbox = document.getElementById(timesetting);
-		var timesetting = txtbox.value
-		$("#return").load("/timer", { "timer": timesetting })
-	}
+	else {
+		function stopalarm() {
+			$("#return").load("/stopalarm")
+		}
+		function clearalarm() {
+			$("#return").load("/clearalarm")
+		}
+		function getles() {
+			$("#taakret").load("/ajax")
+		}
+		function alarmsetup(timesetting) {
+			var txtbox = document.getElementById(timesetting);
+			var timesetting = txtbox.value
+			$("#return").load("/alarmsetup", { "settingup": timesetting })
+		}
+		function starttimer(smesetting) {
+			var txtbox = document.getElementById(timesetting);
+			var timesetting = txtbox.value
+			$("#return").load("/timer", { "timer": timesetting })
+		}
 
-	function setoffset(timesetting) {
-		var txtbox = document.getElementById(timesetting);
-		var offset = txtbox.value
-		console.log(offset);
-		$("#setoffset").load("/setoffset", { "settingup": offset })
+		function setoffset(timesetting) {
+			var txtbox = document.getElementById(timesetting);
+			var offset = txtbox.value
+			console.log(offset);
+			$("#setoffset").load("/setoffset", { "settingup": offset })
+		}
+
+		window.setInterval(function givemetime() {
+			$("#timerefresher").load("/tijd");
+
+		}, 500)
+		window.setInterval(function givemetime() {
+			$("#checkalarm").load("/alarmcheck");
+
+		}, 500)
 	}
-
-	window.setInterval(function givemetime() {
-		$("#timerefresher").load("/tijd");
-
-	}, 500)
-	window.setInterval(function givemetime() {
-		$("#checkalarm").load("/alarmcheck");
-
-	}, 500)
 </script>
 
 </html>
